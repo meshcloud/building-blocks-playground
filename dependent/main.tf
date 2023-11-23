@@ -20,3 +20,7 @@ output "file" {
     content         = local_file.dependent.content
   }
 }
+
+output "filename" {
+  value = local_file.dependent.filename
+}
