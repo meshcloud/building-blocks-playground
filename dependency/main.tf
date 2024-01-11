@@ -15,6 +15,7 @@ resource "local_file" "dependency" {
 
 output "file" {
   value = {
+    info            = "tag"
     filename        = local_file.dependency.filename
     file_permissons = local_file.dependency.file_permission
   }
