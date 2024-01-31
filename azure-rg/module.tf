@@ -41,7 +41,7 @@ variable "location" {
 }
 
 resource "azurerm_resource_group" "test-rg" {
-  name     = "${local.rg-name}"
+  name     = var.rg-name
   location = var.location
 
   lifecycle {
