@@ -1,3 +1,3 @@
 output "stribool" {
-  value = stribool
+  value = var.stribool
 }
