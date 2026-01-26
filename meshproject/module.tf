@@ -26,7 +26,7 @@ resource "meshstack_project" "example" {
     owned_by_workspace = var.workspace_identifier
   }
   spec = {
-    payment_method_identifier = "default"
+    payment_method_identifier = "managed-customer"
     display_name              = "My Project ${var.project_identifier}"
     tags = {
     }
