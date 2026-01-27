@@ -35,8 +35,8 @@ resource "meshstack_project" "example" {
 
 resource "meshstack_tenant" "sr_global" {
   metadata = {
-    owned_by_workspace  = var.workspace_identifier
-    owned_by_project    = var.project_identifier
+    owned_by_workspace  = meshstack_project.example.metadata.owned_by_workspace
+    owned_by_project    = meshstack_project.example.metadata.name
     platform_identifier = "sr.global"
   }
 
