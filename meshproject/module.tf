@@ -32,3 +32,33 @@ resource "meshstack_project" "example" {
     }
   }
 }
+
+resource "meshstack_tenant" "sr_global" {
+  metadata = {
+    owned_by_workspace  = var.workspace_identifier
+    owned_by_project    = var.project_identifier
+    platform_identifier = "sr.global"
+  }
+
+  spec = {
+    # landing_zone_identifier is optional for SERVICEREGISTRY platform type
+  }
+}
+
+resource "meshstack_building_block_v2" "workspace_bb" {
+  spec = {
+    building_block_definition_version_ref = {
+      uuid = "dcfbb560-fc0f-46d6-a07c-dbd89292e1b4"
+    }
+
+    display_name = "workspace-building-block"
+    target_ref = {
+      kind       = "meshWorkspace"
+      identifier = var.workspace_identifier
+    }
+
+    inputs = {
+      fsd = { value_string = "example-value" }
+    }
+  }
+}
