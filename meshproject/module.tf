@@ -51,7 +51,7 @@ resource "meshstack_building_block_v2" "workspace_bb" {
       uuid = "dcfbb560-fc0f-46d6-a07c-dbd89292e1b4"
     }
 
-    display_name = "workspace-building-block"
+    display_name = "My BB for ${var.project_identifier}"
     target_ref = {
       kind       = "meshWorkspace"
       identifier = var.workspace_identifier
