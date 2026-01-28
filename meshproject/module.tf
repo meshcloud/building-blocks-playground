@@ -63,7 +63,6 @@ resource "meshstack_building_block_v2" "workspace_bb" {
     }
 
     inputs = {
-      fsd = { value_string = "example-value" }
     }
   }
 }
