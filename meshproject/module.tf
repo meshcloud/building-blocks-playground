@@ -20,6 +20,11 @@ variable "workspace_identifier" {
   description = "The identifier of the meshStack workspace."
 }
 
+variable "building_block_definition_version_uuid" {
+  type        = string
+  description = "The uuid of the building block definition version that will be used for the creation of another building block."
+}
+
 resource "meshstack_project" "example" {
   metadata = {
     name               = var.project_identifier
@@ -48,7 +53,7 @@ resource "meshstack_tenant" "sr_global" {
 resource "meshstack_building_block_v2" "workspace_bb" {
   spec = {
     building_block_definition_version_ref = {
-      uuid = "dcfbb560-fc0f-46d6-a07c-dbd89292e1b4"
+      uuid = var.building_block_definition_version_uuid
     }
 
     display_name = "My BB for ${var.project_identifier}"
