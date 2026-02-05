@@ -4,8 +4,7 @@ variable "num" {
 }
 
 variable "text" {
-  type = string
-  default = "foo"
+  type = list(string)
 }
 
 variable "flag" {
