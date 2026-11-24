@@ -66,10 +66,17 @@ module "postgres_db" {
     workspace_identifier    = { display_name = "Workspace", type = "STRING", assignment_type = "WORKSPACE_IDENTIFIER" }
     project_identifier      = { display_name = "Project", type = "STRING", assignment_type = "PROJECT_IDENTIFIER" }
     namespace               = { display_name = "Namespace", type = "STRING", assignment_type = "PLATFORM_TENANT_ID" }
-    landing_zone_identifier = { display_name = "Landing Zone", type = "STRING", assignment_type = "LANDING_ZONE_IDENTIFIER" }
-    enable_audit            = { display_name = "Audit Logging", type = "BOOLEAN", assignment_type = "USER_INPUT", default_value = jsonencode(false), updateable_by_consumer = true }
-    instance_hosts          = { display_name = "Instance Hosts", type = "CODE", assignment_type = "STATIC", argument = jsonencode(jsonencode(local.instance_hosts)) }
-    delay_seconds           = { display_name = "Delay", type = "INTEGER", assignment_type = "STATIC", argument = jsonencode(12) }
+    landing_zone_identifier = { display_name = "Landing Zone", type = "STRING", assignment_type = "LANDING_ZONE_IDENTIFIER", description = "Landing zone of the tenant. It selects the shared instance." }
+    enable_audit = {
+      display_name    = "Audit logging"
+      description     = "Records every change to your tables in an audit trail. Production only."
+      type            = "BOOLEAN"
+      assignment_type = "USER_INPUT"
+      default_value   = jsonencode(false)
+      condition       = "input.landing_zone_identifier == \"${var.platform_identifier}-namespace-prod\""
+    }
+    instance_hosts = { display_name = "Instance Hosts", type = "CODE", assignment_type = "STATIC", argument = jsonencode(jsonencode(local.instance_hosts)) }
+    delay_seconds  = { display_name = "Delay", type = "INTEGER", assignment_type = "STATIC", argument = jsonencode(12) }
   }
   outputs = {
     database    = { display_name = "Database", type = "STRING", assignment_type = "NONE" }

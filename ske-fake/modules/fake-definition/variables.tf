@@ -68,6 +68,7 @@ variable "inputs" {
     default_value          = optional(string)
     is_environment         = optional(bool)
     updateable_by_consumer = optional(bool)
+    condition              = optional(string)
     value_validation_regex = optional(string)
 
     validation_regex_error_message = optional(string)
