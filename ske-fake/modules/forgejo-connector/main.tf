@@ -61,36 +61,37 @@ output "actions_url" {
 
 output "summary" {
   description = "Markdown summary shown on the building block."
-  value       = <<-EOT
-    # Forgejo Connector: **${var.stage}**
-
-    > This is a **fake** connector for the dev environment. The pipeline "ran" for ${var.pipeline_seconds} s at ${time_sleep.pipeline.triggers.run}, and nothing was deployed.
-
-    The `${var.stage}` branch of [${var.repository_owner}/${var.repository_name}](${local.repository_url}) deploys
-    to the namespace `${var.namespace}` on `${var.kube_host}`.
-
-    | Property | Value |
-    |----------|-------|
-    | **Application** | [${local.app_url}](${local.app_url}) |
-    | **Pipeline** | [`pipeline.yaml` in Forgejo Actions](${local.actions_url}) |
-    | **Service Account** | `forgejo-actions`, `edit` on the namespace |
-
-    ## Forgejo Actions secrets and variables
-
-    | Name | Kind | Holds |
-    |------|------|-------|
-    | `KUBECONFIG_${upper(var.stage)}` | secret | kubeconfig of the service account |
-    | `K8S_NAMESPACE_${upper(var.stage)}` | variable | `${var.namespace}` |
-    | `APP_HOSTNAME_${upper(var.stage)}` | variable | `${var.app_hostname}` |
-    %{~if length(var.additional_kubernetes_secrets) > 0}
-
-    ## Kubernetes secrets in the namespace
-
-    | Secret | Filled from the Vault secret |
-    |--------|------------------------------|
-    %{~for name, path in var.additional_kubernetes_secrets}
-    | `${name}` | `${path}` |
-    %{~endfor}
-    %{~endif}
-  EOT
+  value = join("\n", concat(
+    [
+      "# Forgejo Connector: **${var.stage}**",
+      "",
+      "> This is a **fake** connector for the dev environment. The pipeline \"ran\" for ${var.pipeline_seconds} s at ${time_sleep.pipeline.triggers.run}, and nothing was deployed.",
+      "",
+      "The `${var.stage}` branch of [${var.repository_owner}/${var.repository_name}](${local.repository_url}) deploys to the namespace `${var.namespace}` on `${var.kube_host}`.",
+      "",
+      "| Property | Value |",
+      "|----------|-------|",
+      "| **Application** | [${local.app_url}](${local.app_url}) |",
+      "| **Pipeline** | [`pipeline.yaml` in Forgejo Actions](${local.actions_url}) |",
+      "| **Service Account** | `forgejo-actions`, `edit` on the namespace |",
+      "",
+      "## Forgejo Actions secrets and variables",
+      "",
+      "| Name | Kind | Holds |",
+      "|------|------|-------|",
+      "| `KUBECONFIG_${upper(var.stage)}` | secret | kubeconfig of the service account |",
+      "| `K8S_NAMESPACE_${upper(var.stage)}` | variable | `${var.namespace}` |",
+      "| `APP_HOSTNAME_${upper(var.stage)}` | variable | `${var.app_hostname}` |",
+    ],
+    length(var.additional_kubernetes_secrets) == 0 ? [] : concat(
+      [
+        "",
+        "## Kubernetes secrets in the namespace",
+        "",
+        "| Secret | Filled from the Vault secret |",
+        "|--------|------------------------------|",
+      ],
+      [for name, path in var.additional_kubernetes_secrets : "| `${name}` | `${path}` |"],
+    ),
+  ))
 }

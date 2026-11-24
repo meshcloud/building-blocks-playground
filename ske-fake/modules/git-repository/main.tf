@@ -110,38 +110,38 @@ output "repository_ssh_url" {
 
 output "summary" {
   description = "Markdown summary shown on the building block."
-  value       = <<-EOT
-    # ✅ Git Repository Created
-
-    > This is a **fake** STACKIT Git repository for the dev environment. The links do not resolve.
-
-    **${var.name}** is ready on STACKIT Git Forgejo.
-
-    ## Repository Details
-
-    - **Name**: ${var.name}
-    - **Owner**: ${var.forgejo_organization}
-    - **Visibility**: ${var.private ? "private" : "public"}
-    - **URL**: ${local.html_url}
-    - **Clone URL**: `${local.clone_url}`
-    %{~if local.have_clone_addr}
-    - **Initialized from**: `${var.clone_addr}`
-    %{~endif}
-
-    ## Actions Variables
-
-    | Name | Value |
-    |------|-------|
-    %{~for name, value in local.action_variables}
-    | `${name}` | `${value}` |
-    %{~endfor}
-
-    ## Workspace Member Access
-
-    | workspace member | role | team |
-    |------------------|------|------|
-    %{~for m in local.members}
-    | `${m.email}` | `${m.roles}` | `${m.team}` |
-    %{~endfor}
-  EOT
+  value = join("\n", concat(
+    [
+      "# ✅ Git Repository Created",
+      "",
+      "> This is a **fake** STACKIT Git repository for the dev environment. The links do not resolve.",
+      "",
+      "**${var.name}** is ready on STACKIT Git Forgejo.",
+      "",
+      "## Repository Details",
+      "",
+      "- **Name**: ${var.name}",
+      "- **Owner**: ${var.forgejo_organization}",
+      "- **Visibility**: ${var.private ? "private" : "public"}",
+      "- **URL**: ${local.html_url}",
+      "- **Clone URL**: `${local.clone_url}`",
+    ],
+    local.have_clone_addr ? ["- **Initialized from**: `${var.clone_addr}`"] : [],
+    [
+      "",
+      "## Actions Variables",
+      "",
+      "| Name | Value |",
+      "|------|-------|",
+    ],
+    [for name, value in local.action_variables : "| `${name}` | `${value}` |"],
+    [
+      "",
+      "## Workspace Member Access",
+      "",
+      "| workspace member | role | team |",
+      "|------------------|------|------|",
+    ],
+    [for m in local.members : "| `${m.email}` | `${m.roles}` | `${m.team}` |"],
+  ))
 }

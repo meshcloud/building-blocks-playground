@@ -1,16 +1,16 @@
 output "summary" {
   description = "Markdown summary shown on the building block."
-  value       = <<-EOT
-    # ${var.service}
-
-    > This is a **fake** of ${var.service} for the dev environment. Nothing was provisioned on STACKIT.
-
-    | Output | Value |
-    |--------|-------|
-    %{~for name, value in local.values}
-    | `${name}` | `${value}` |
-    %{~endfor}
-  EOT
+  value = join("\n", concat(
+    [
+      "# ${var.service}",
+      "",
+      "> This is a **fake** of ${var.service} for the dev environment. Nothing was provisioned on STACKIT.",
+      "",
+      "| Output | Value |",
+      "|--------|-------|",
+    ],
+    [for name, value in local.values : "| `${name}` | `${value}` |"],
+  ))
 }
 
 output "project_id" {
