@@ -243,6 +243,6 @@ variable "hub" {
   description = <<-EOT
   `git_ref`: meshstack-hub reference the nested integrations are sourced from.
   `bbd_draft`: Draft state of the application team definitions (starter kit, Git repository, Forgejo
-  connector). The platform's own definitions are always drafts.
+  connector) and of the namespace definition every tenant gets. The platform's own definitions are always drafts.
   EOT
 }

@@ -53,6 +53,7 @@ resource "meshstack_building_block" "instance" {
 
 module "postgres_db" {
   source = "../../modules/fake-definition"
+  draft  = false
 
   display_name        = "Postgres DB (Fake)"
   description         = "A PostgreSQL database of your own on the stage's shared instance, with its credentials as a Kubernetes Secret in your namespace. Fake: creates nothing."

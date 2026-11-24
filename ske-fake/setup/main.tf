@@ -81,6 +81,7 @@ resource "meshstack_landingzone" "stackit_fake_default" {
 
 module "stackit_project" {
   source = "../modules/fake-definition"
+  draft  = false
 
   display_name        = "STACKIT Project (Fake)"
   description         = "Fake of a STACKIT project for the dev environment. Creates nothing."
@@ -105,6 +106,7 @@ module "stackit_project" {
 
 module "service_account" {
   source = "../modules/fake-definition"
+  draft  = false
 
   display_name        = "STACKIT Service Account (Fake)"
   description         = "Fake of a STACKIT service account for the dev environment. Creates nothing."
@@ -133,6 +135,7 @@ module "service_account" {
 
 module "service_account_federation" {
   source = "../modules/fake-definition"
+  draft  = false
 
   display_name        = "STACKIT Service Account Federation (Fake)"
   description         = "Fake of the workload identity federation that lets building block runs act as a STACKIT service account. Creates nothing."
@@ -156,7 +159,7 @@ module "reference_architecture" {
 
   fake_git_ref = var.fake_git_ref
   meshstack    = { owning_workspace_identifier = var.workspace, tags = {}, runner_ref = var.runner_ref }
-  hub          = { git_ref = var.hub_git_ref, bbd_draft = true }
+  hub          = { git_ref = var.hub_git_ref, bbd_draft = false }
 }
 
 locals {

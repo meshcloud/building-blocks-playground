@@ -7,6 +7,7 @@ module "namespace_integration" {
   supported_platforms       = local.fake_platforms
   use_in_landing_zones_only = true
   implementation_path       = "ske-fake/modules/namespace"
+  draft                     = var.hub.bbd_draft
   approval_policies         = var.approval_policies
   meshstack                 = local.platform_meshstack
 
