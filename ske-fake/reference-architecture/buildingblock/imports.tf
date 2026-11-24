@@ -1,0 +1,65 @@
+locals {
+  imports = var.imports != null ? var.imports : {
+    project                = null
+    adopt_ske              = false
+    git                    = null
+    dns                    = null
+    adopt_ingress          = false
+    secrets_manager        = null
+    container_registry     = null
+    kubernetes_platform    = null
+    starterkit_definitions = null
+  }
+
+  platform_imports = { for key, adopted in local.imports : key => adopted if key != "project" && adopted != null && adopted != false }
+
+  project_import_ids = local.imports.project == null ? toset([]) : toset(["${var.workspace}.${local.project_identifier}"])
+
+  admin_binding_imports = local.imports.project == null ? {} : local.imports.project.admin_bindings
+}
+
+data "meshstack_platform" "landingzone" {
+  lifecycle {
+    enabled = local.imports.project != null
+  }
+
+  metadata = {
+    uuid = var.landingzone.platform_ref.uuid
+  }
+}
+
+import {
+  for_each = local.release_imports_on_destroy ? toset([]) : local.project_import_ids
+  to       = module.project.meshstack_project.this
+  id       = each.value
+}
+
+import {
+  for_each = local.release_imports_on_destroy ? local.project_import_ids : toset([])
+  to       = module.project.meshstack_project.released
+  id       = each.value
+}
+
+import {
+  for_each = local.release_imports_on_destroy ? toset([]) : local.project_import_ids
+  to       = module.tenant.meshstack_tenant.this
+  id       = "${each.value}.${data.meshstack_platform.landingzone.identifier}"
+}
+
+import {
+  for_each = local.release_imports_on_destroy ? local.project_import_ids : toset([])
+  to       = module.tenant.meshstack_tenant.released
+  id       = "${each.value}.${data.meshstack_platform.landingzone.identifier}"
+}
+
+import {
+  for_each = local.release_imports_on_destroy ? {} : local.admin_binding_imports
+  to       = module.project_admin_bindings.meshstack_project_user_binding.this[each.key]
+  id       = each.value
+}
+
+import {
+  for_each = local.release_imports_on_destroy ? local.admin_binding_imports : {}
+  to       = module.project_admin_bindings.meshstack_project_user_binding.released[each.key]
+  id       = each.value
+}
