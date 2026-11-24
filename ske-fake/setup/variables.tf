@@ -55,3 +55,9 @@ variable "project_owner_tag_key" {
   type    = string
   default = null
 }
+
+variable "project_identifier" {
+  type        = string
+  default     = null
+  description = "Identifier of the platform's meshProject, for environments whose identifier pattern rejects `<platform identifier>-ske`."
+}

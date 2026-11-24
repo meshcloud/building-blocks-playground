@@ -179,6 +179,7 @@ resource "meshstack_building_block" "reference_architecture" {
       payment_method      = { value = jsonencode({ kind = "meshPaymentMethod", name = var.payment_method }) }
       landingzone_variant = { value = jsonencode("default") }
       dns_domain          = { value = jsonencode("stackit.run") }
+      overrides           = { value = jsonencode(jsonencode(var.project_identifier == null ? {} : { project_identifier = var.project_identifier })) }
 
       landingzone = { value = jsonencode(jsonencode({
         platform_ref                               = { uuid = meshstack_platform.stackit_fake.metadata.uuid }
