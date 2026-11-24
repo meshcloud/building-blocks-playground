@@ -222,13 +222,6 @@ module "forgejo_connector_integration" {
       assignment_type = "STATIC"
       argument        = jsonencode(jsonencode(var.ai_model == null ? {} : { "stackit-ai" = "${var.platform_identifier}/stackit/ai-llm" }))
     }
-    FORGEJO_HOST = {
-      display_name    = "FORGEJO_HOST"
-      type            = "STRING"
-      assignment_type = "STATIC"
-      is_environment  = true
-      argument        = jsonencode(local.forgejo_instance_url)
-    }
     forgejo_host = {
       display_name    = "Forgejo Host"
       type            = "STRING"
